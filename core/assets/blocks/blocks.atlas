@@ -1,0 +1,13 @@
+
+blocks.png
+size: 64,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Diamond
+  rotate: false
+  xy: 2, 2
+  size: 35, 35
+  orig: 35, 35
+  offset: 0, 0
+  index: -1
