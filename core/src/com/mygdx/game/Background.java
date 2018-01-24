@@ -9,9 +9,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import static com.badlogic.gdx.math.MathUtils.random;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import static javax.swing.text.StyleConstants.Background;
 
 public class Background extends ApplicationAdapter {
     // texture atlas that will help load in the images from the big image
@@ -55,9 +57,32 @@ public class Background extends ApplicationAdapter {
     //image of the ball
     Texture img;
 
+
+    private Background gameManager;
+ 
+    private int score;
+
+    // SCREEN IMAGES
+
+    private Texture Background;
+
+    private Texture start; 
+    
+    
+    // boolean statements to switch screens
+    // game screen
+    private boolean gameScreen;
+ 
+    private boolean startScreen;
+    
+    //score updater
+    private int prePos;
+    private Background game;
+
     @Override
     public void create() {
-        
+
+       this.gameManager = game;
         // set up the camera and view
         this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -68,7 +93,7 @@ public class Background extends ApplicationAdapter {
 
         this.view = new FitViewport(width, height, camera);
         view.apply();
-
+//        batch.begin();
         // diamond image
         this.atlas = new TextureAtlas("blocks/blocks.atlas");
         batch = new SpriteBatch();
@@ -140,6 +165,7 @@ public class Background extends ApplicationAdapter {
             // make the path turn left if it is too far right
             if (currentX >= 700) {
                 path = "upLeft";
+            
             }
         }
         
@@ -149,8 +175,22 @@ public class Background extends ApplicationAdapter {
         this.dx = 420;
         this.dy = 30;
         img = new Texture("ball.png");
-    }
+   
+        Background = new Texture("background.jpg");
+        // rules button
+        // start button
+        start = new Texture("start.png");
+        
+        // boolean variables default set
+        this.gameScreen = false;
 
+        this.startScreen = true;
+
+  
+
+    }
+    
+    
     @Override
     public void render() {
 
@@ -173,6 +213,7 @@ public class Background extends ApplicationAdapter {
                 }
             }
         batch.draw(img, dx, dy);
+        
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             this.dx += 2;
             this.dy += 2;
@@ -182,15 +223,31 @@ public class Background extends ApplicationAdapter {
             this.dy += 2;
             batch.draw(img, dx, dy);
         }
-        this.playerx = this.playerx + this.dx;
-                this.playery = this.playery + this.dy;
-        // end the drawing
-        batch.end();
 
+        // keyboard input
+        // go to the game
+          if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                gameScreen = true;
+                startScreen = false;
+                
+            }
+           
+        // start screen
+        if (gameScreen == false && startScreen == true) {
+
+            // draw homepage background
+            batch.draw(Background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            // draw start button
+            batch.draw(start, 335, 235, 480, 70);
+
+      batch.end();
+
+    }
     }
 
     @Override
     public void dispose() {
+    
     }
 
     // randomize the path
